@@ -200,13 +200,13 @@ function enqueue_custom_scripts_and_styles()
   wp_enqueue_script('jquery', 'https://code.jquery.com/jquery-3.6.4.min.js', array(), '3.6.4', true);
   wp_enqueue_style('datetimepicker-style', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css', array(), '2.5.20');
   wp_enqueue_script('datetimepicker-script', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js', array('jquery'), '2.5.20', true);
-  wp_enqueue_script('custom-script', plugins_url() . '/cofe_plugin-master/js/cofescript.js', array('jquery', 'datetimepicker-script'), '1.0', true);
+  wp_enqueue_script('custom-script', plugins_url() . '/lastcofeplauckin/js/cofescript.js', array('jquery', 'datetimepicker-script'), '1.0', true);
   wp_localize_script('custom-script', 'custom_script_vars', array(
     'minDate' => 0, 'allowedTimes' => json_decode($results[0]['config'])
   ));
   wp_enqueue_script('bootstrapjs', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js', array(), '3.6.4', true);
   wp_enqueue_style('bootstrap-style', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css', array(), '2.5.20');
-  // wp_enqueue_script('datatables', 'https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js', array('jquery'), '1.10.24', true);
+  
 }
 
 // Enqueue Bootstrap CSS
@@ -232,25 +232,13 @@ function enqueue_datatable_css()
 }
 add_action('admin_enqueue_scripts', 'enqueue_bootstrap_css');
 add_action('admin_enqueue_scripts', 'enqueue_datatable_css');
-//https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css
+
 
 add_action('admin_enqueue_scripts', 'enqueue_bootstrapdatatable_js');
 add_action('admin_enqueue_scripts', 'enqueue_bootstrap_js');
 add_action('wp_enqueue_scripts', 'enqueue_custom_scripts_and_styles');
 add_action('init', 'contact_form_process');
 add_action('init', 'insert_data_into_table');
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Add menu item to admin dashboard
 function my_plugin_menu()
@@ -271,12 +259,12 @@ function my_plugin_settings_page()
 ?>
   <div class="container">
     <div class="mt-5 mr-10">
-    <form method="post" action="<?php echo esc_url( admin_url('admin-post.php') ); ?>">
+      <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <div class="mb-3 ">
           <input type="text" name="column1" class="form-controll" id="exampleCheck1"> format ["09:00","10:00","11:00","12:00","13:00","14:00"]
         </div>
 
-        <button type="submit"  class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>
     <p>List all the member</p>
@@ -329,30 +317,26 @@ function my_plugin_main_settings_callback()
   echo '<p>Configure the main settings for the plugin.</p>';
 }
 
-// Field callback
-function my_plugin_text_field_callback()
+
+
+add_action('admin_post_nopriv_update_table_data', 'update_table_data');
+
+function update_table_data()
 {
-  $value = get_option('my_plugin_option');
-  echo '<input type="text" name="my_plugin_option" value="' . esc_attr($value) . '" />';
-}
-
-add_action( 'admin_post_nopriv_update_table_data', 'update_table_data' );
-
-function update_table_data() {
   global $wpdb;
 
-  
-  if ( isset( $_POST['column1'] ) ) {
-      $column1_value = sanitize_text_field( $_POST['column1'] );
-      
-      $table_name = $wpdb->prefix . 'cofebookconfig';
-      $data_to_update = array(
-          'config' => $column1_value,
-          );
-      $where = array( 'id' => 1);
-      $wpdb->update( $table_name, $data_to_update, $where );
-      wp_redirect( $_SERVER['HTTP_REFERER'] );
-      exit;
+
+  if (isset($_POST['column1'])) {
+    $column1_value = sanitize_text_field($_POST['column1']);
+
+    $table_name = $wpdb->prefix . 'cofebookconfig';
+    $data_to_update = array(
+      'config' => $column1_value,
+    );
+    $where = array('id' => 1);
+    $wpdb->update($table_name, $data_to_update, $where);
+    wp_redirect($_SERVER['HTTP_REFERER']);
+    exit;
   }
 }
 ?>
@@ -360,8 +344,6 @@ function update_table_data() {
 function contact_form_js()
 { ?>
   <script type="text/javascript">
-    var table = $('#example').DataTable();
-
     function validateForm(form) {
 
       var errors = '';
