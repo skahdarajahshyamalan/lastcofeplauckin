@@ -157,13 +157,35 @@ function contact_form_process()
 }
 function insert_row_into_custom_table($name, $email, $phone, $date_time, $Guests, $Des, $Indoor, $Outdoor)
 {
+
+  //
+  
+$dateString = $date_time; 
+list($datePart, $timePart) = explode(' ', $dateString);
+list($hour, $minute) = explode(':', $timePart);
+$hour = (int)$hour;
+if ($hour >= 12) {
+    // If yes, assume it's PM and append ' PM' to the time part
+    $timePart .= ' PM';
+} else {
+    // If no, assume it's AM and append ' AM' to the time part
+    $timePart .= ' AM';
+}
+
+// Join the date and time parts back together
+$formattedDate = $datePart . ' ' . $timePart;
+
+// Output the formatted date
+//echo $formattedDate; // Output will be like: 2024-04-22 02:00 AM
+
+  //
   global $wpdb;
   $table_name = $wpdb->prefix . 'cofebook';
   $data = array(
     'fullname'  => $name,
     'email' => $email,
     'phone' => $phone,
-    'date_time' => $date_time,
+    'date_time' => $formattedDate,
     'guests' => $Guests,
     'descript' => $Des,
     'indor' => $Indoor,
@@ -298,6 +320,11 @@ function my_plugin_settings_page()
 
     </table>
   </div>
+  <script>
+    jQuery(document).ready(function($) {
+      $('#example').DataTable();
+    });
+  </script>
 
 <?php
 }
