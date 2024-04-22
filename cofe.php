@@ -22,15 +22,15 @@ register_activation_hook(__FILE__, 'my_custom_plugin_install');
 function example_form_plugin()
 {
   $form_action    = get_permalink();
-  if (($_SESSION['contact_form_success'])) {
+  if ((@$_SESSION['contact_form_success'])) {
     $contact_form_success = '<p style="color: green">Thank you for Your Messages.</p>';
     unset($_SESSION['contact_form_success']);
   }
-
+  $res = isset($contact_form_success)?$contact_form_success:'' ;
   $markup = <<<EOT
 
 <div id="cform">
-{$contact_form_success}
+{$res}
 <form onsubmit="return validateForm(this);" action="{$form_action}" method="post" enctype="multipart/form-data" style="text-align: left"><div class="mb-3 row">
        <label for="your_name" class="col-sm-2 col-form-label fs-5">Name</label>
        <div class="col-sm-10">
