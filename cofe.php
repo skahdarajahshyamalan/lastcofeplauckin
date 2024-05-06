@@ -80,12 +80,12 @@ function example_form_plugin()
      <div class="mb-3 row">
      <label for="inputPassword" class="col-sm-2 col-form-label fs-5"></label>
      <div class="col-sm-10">
-     <div class="row">
-     <div class="col-1">
+     <div class="row m-2">
+     <div class="col-2">
      <input class="form-check-input" type="checkbox" value="1" name="Indoor" id="Indoor">
      <label class="form-check-label" name="Indoor" for="reverseCheck1"> Indoor </label>
      </div>
-      <div class="col-1"><input class="form-check-input" value="1" type="checkbox" name="Outdoor" id="Outdoor">
+      <div class="col-3"><input class="form-check-input" value="1" type="checkbox" name="Outdoor" id="Outdoor">
       <label class="form-check-label" name="Out door" id="Outdoor" for="reverseCheck1">Out door</div> 
     </div>
      </div>
@@ -379,7 +379,8 @@ function contact_form_js()
       if (!regexpEmail.test(form.Email.value)) errors += "Error :  your e-mail address format incorrect.\n";
       if (form.Name.value.trim() === '') {
         errors += "Error: Full name cannot be empty.\n";
-      }
+      } 
+    	
       if (errors != '') {
         alert(errors);
         return false;
